@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { User } = require("../models");
+const { User, Listing, Review } = require("../models");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
@@ -16,30 +16,72 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-  },
-
-  Mutation: {
-    addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ username, email, password });
-      const token = signToken(user);
-      return { token, user };
+    listings: async () => {
+      return Listing.find();
     },
-    login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email });
+    listing: async (parent, { _id }) => {
+      const listing = Listing.findOne({ _id });
+      return listing;
+    },
+    reviews: async () => {
+      return Review.find();
+    },
+    review: async (parent, { _id }) => {
+      review = Review.findOne({ _id });
+      return review;
+    },
 
-      if (!user) {
-        throw new AuthenticationError("No user found with this email address");
-      }
+    Mutation: {
+      addUser: async (parent, { username, email, password }) => {
+        const user = await User.create({ username, email, password });
+        const token = signToken(user);
+        return { token, user };
+      },
+      addListing: async (
+        parent,
+        { title, description, price, image, location, contactInfo },
+      ) => {
+        const listing = await Listing.create({
+          title,
+          description,
+          price,
+          image,
+          location,
+          contactInfo,
+        });
+        return listing;
+      },
+      removeListing: async (parent, { _id }) => {
+        const listing = await Listing.findOneAndDelete({ _id });
+        return listing;
+      },
+      addReview: async (parent, { reviewText, reviewAuthor }) => {
+        const review = await Review.create({ reviewText, reviewAuthor });
+        return review;
+      },
+      removeReview: async (parent, { _id }) => {
+        const review = await Review.findOneAndDelete({ _id });
+        return review;
+      },
+      login: async (parent, { email, password }) => {
+        const user = await User.findOne({ email });
 
-      const correctPw = await user.isCorrectPassword(password);
+        if (!user) {
+          throw new AuthenticationError(
+            "No user found with this email address",
+          );
+        }
 
-      if (!correctPw) {
-        throw new AuthenticationError("Incorrect credentials");
-      }
+        const correctPw = await user.isCorrectPassword(password);
 
-      const token = signToken(user);
+        if (!correctPw) {
+          throw new AuthenticationError("Incorrect credentials");
+        }
 
-      return { token, user };
+        const token = signToken(user);
+
+        return { token, user };
+      },
     },
   },
 };
