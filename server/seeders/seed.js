@@ -14,3 +14,24 @@ db.once("open", async () => {
   console.log("all done!");
   process.exit(0);
 });
+
+
+// create listing seed data and insert into database
+
+
+const listingSeeds = require("./listingSeeds.json");
+
+db.once("open", async () => {
+  try {
+    await Listing.deleteMany({});
+    await Listing.create(listingSeeds);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+
+  console.log("all done!");
+  process.exit(0);
+});
+
+
