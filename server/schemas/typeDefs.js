@@ -23,6 +23,61 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
   }
+
+  type Listing {
+    _id: ID
+    title: String
+    description: String
+    price: Float
+    image: String
+    location: String
+    createdAt: String
+    username: String
+  }
+
+  type Query {
+    listings: [Listing]
+    listing(_id: ID!): Listing
+  }
+
+  type Mutation {
+    addListing(
+      title: String!
+      description: String!
+      price: Float!
+      image: String!
+      location: String!
+    ): Listing
+    updateListing(
+      _id: ID!
+      title: String!
+      description: String!
+      price: Float!
+      image: String!
+      location: String!
+    ): Listing
+    removeListing(_id: ID!): Listing
+  }
+
+  type Review {
+    _id: ID
+    reviewText: String
+    reviewAuthor: String
+    createdAt: String
+  }
+
+  type Query {
+    reviews: [Review]
+    review(_id: ID!): Review
+  }
+
+  type Mutation {
+    addReview(reviewText: String!, reviewAuthor: String!): Review
+    updateReview(_id: ID!, reviewText: String!): Review
+    removeReview(_id: ID!): Review
+  }
+
+
 `;
 
 module.exports = typeDefs;
