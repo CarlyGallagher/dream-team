@@ -39,7 +39,7 @@ const resolvers = {
       },
       addListing: async (
         parent,
-        { title, description, price, image, location, contactInfo },
+        { title, description, price, image, location },
       ) => {
         const listing = await Listing.create({
           title,
@@ -47,7 +47,6 @@ const resolvers = {
           price,
           image,
           location,
-          contactInfo,
         });
         return listing;
       },
