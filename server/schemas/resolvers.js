@@ -44,6 +44,15 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
+
+    addFollower: async (parent, { username }) => {
+      const user = await User.findOneAndUpdate(
+        { username },
+        { $addToSet: { followers: username } },
+        { new: true },
+      );
+      return user;
+      
     addListing: async (
       parent,
       { title, description, price, image, location },
