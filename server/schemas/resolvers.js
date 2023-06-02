@@ -37,6 +37,17 @@ const resolvers = {
         const token = signToken(user);
         return { token, user };
       },
+      addFollower: async (parent, { followerId }, context) => {
+        if (context.user) {
+          const updatedUser = await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $addToSet: { followers: followerId } },
+            { new: true },
+          ).populate("followers");
+          return updatedUser;
+        }
+        throw new AuthenticationError("You need to be logged in!");
+      },
       addListing: async (
         parent,
         { title, description, price, image, location },
