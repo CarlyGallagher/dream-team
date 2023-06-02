@@ -16,12 +16,19 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    followers: async (parent, { username }) => {
+      return User.findOne({ username }).populate("followers");
+    },
     listings: async () => {
       return Listing.find();
     },
     listing: async (parent, { _id }) => {
       const listing = Listing.findOne({ _id });
       return listing;
+    },
+    listingIsTaken: async (parent, { _id }) => {
+      const listing = Listing.findOne({ _id });
+      return listing.isTaken;
     },
     reviews: async () => {
       return Review.find();
