@@ -52,7 +52,7 @@ const resolvers = {
         { new: true },
       );
       return user;
-      
+    },      
     addListing: async (
       parent,
       { title, description, price, image, location },
