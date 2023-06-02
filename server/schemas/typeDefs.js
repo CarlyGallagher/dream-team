@@ -17,11 +17,23 @@ const typeDefs = gql`
     users: [User]
     user(username: String!): User
     me: User
+    followers: [User]
+    listings: [Listing]
+    listingIsTaken(_id: ID!): Boolean
   }
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
+    addFollower(username: String!): User
+    addListing(
+      title: String!
+      description: String!
+      price: Float!
+      image: String!
+      location: String!
+    ): Listing
+    removeListing(_id: ID!): Listing
   }
 
   type Listing {
