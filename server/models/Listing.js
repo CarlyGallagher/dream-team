@@ -31,7 +31,11 @@ const listingSchema = new Schema({
   username: {
     type: String,
     required: true
-  }
+  },
+  isTaken: {
+    type: Boolean,
+    default: false
+  },
 },
 {
   toJSON: {
