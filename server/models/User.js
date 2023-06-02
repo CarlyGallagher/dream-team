@@ -19,6 +19,18 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
+  listings: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Listing",
+    },
+  ],
+  followers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ]
 });
 
 userSchema.pre("save", async function (next) {
